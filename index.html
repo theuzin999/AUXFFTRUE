@@ -329,6 +329,10 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
       import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+      // 1. LIMPEZA DE COOKIES AO ABRIR (Reset de Segurança)
+      // Remove qualquer cookie anterior para forçar um novo login.
+      document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
       // Configuração do projeto 'keys-auxilio'
       const firebaseConfig = {
         apiKey: "AIzaSyDq42y0cA7bmCebXaZa5dKTJFMvIZTUtNI",
@@ -352,13 +356,17 @@
       const openBtn = document.getElementById('openTermsBtn');
       const closeBtn = document.getElementById('closeModalBtn');
 
-      openBtn.addEventListener('click', () => {
-          modal.classList.add('show');
-      });
+      if(openBtn) {
+        openBtn.addEventListener('click', () => {
+            modal.classList.add('show');
+        });
+      }
 
-      closeBtn.addEventListener('click', () => {
-          modal.classList.remove('show');
-      });
+      if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+      }
 
       // Fecha ao clicar fora do modal
       window.addEventListener('click', (e) => {
@@ -391,10 +399,9 @@
           const snapshot = await getDocs(q);
 
           if (!snapshot.empty) {
-            // Sucesso no login
-            localStorage.setItem('isLoggedIn', 'true');
-            // Dica: Se quiser usar sessionStorage como no outro arquivo, descomente a linha abaixo:
-            // sessionStorage.setItem('sessionId', 'token-gerado'); 
+            // Sucesso no login - Define o Cookie para o Middleware ler
+            // O path=/ garante que o cookie seja legível em todo o site
+            document.cookie = "isLoggedIn=true; path=/; samesite=strict";
             
             window.location.href = 'auxilio.html';
           } else {
