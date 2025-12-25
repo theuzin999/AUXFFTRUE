@@ -41,14 +41,8 @@
         }
 
         @keyframes fall {
-            0% {
-                transform: translateY(-20px);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
+            0% { transform: translateY(-20px); opacity: 0.8; }
+            100% { transform: translateY(100vh); opacity: 0; }
         }
 
         .login-container {
@@ -82,14 +76,8 @@
             color: #ffffff;
             font-size: 1.1em;
             outline: none;
-            transition: border-bottom 0.3s ease;
         }
 
-        .input-field:focus {
-            border-bottom: 2px solid #e066ff; 
-        }
-
-        /* --- Estilos do Checkbox e Termos --- */
         .terms-container {
             display: flex;
             align-items: flex-start;
@@ -105,40 +93,26 @@
             margin-right: 8px;
             margin-top: 3px;
             accent-color: #9400d3;
-            cursor: pointer;
         }
 
         .terms-link {
             color: #e066ff;
             text-decoration: underline;
             cursor: pointer;
-            transition: color 0.2s;
         }
 
-        .terms-link:hover {
-            color: #ffffff;
-        }
-
-        /* --- Estilos do Modal de Termos --- */
+        /* Modal Styles */
         .modal-overlay {
-            display: none; /* Oculto por padrão */
+            display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
+        .modal-overlay.show { display: flex; }
 
         .modal-content {
             background: #1a1a1a;
@@ -147,71 +121,9 @@
             max-height: 80vh;
             border-radius: 10px;
             border: 1px solid #9400d3;
-            box-shadow: 0 0 20px rgba(148, 0, 211, 0.3);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .modal-header {
-            padding: 15px;
-            background: #2a0a3a;
-            border-bottom: 1px solid #9400d3;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: #fff;
-            font-size: 1.2em;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: #e066ff;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .close-modal:hover {
-            color: white;
-        }
-
-        .modal-body {
-            padding: 20px;
             overflow-y: auto;
-            text-align: left;
-            color: #ddd;
-            font-size: 0.95em;
-            line-height: 1.6;
+            padding: 20px;
         }
-
-        .modal-body h4 {
-            color: #e066ff;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 3px;
-        }
-
-        /* Scrollbar personalizada para o modal */
-        .modal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-        .modal-body::-webkit-scrollbar-thumb {
-            background: #9400d3;
-            border-radius: 4px;
-        }
-        .modal-body::-webkit-scrollbar-track {
-            background: #111;
-        }
-
-        /* --- Fim Estilos Modal --- */
 
         .login-button {
             margin-top: 20px;
@@ -223,117 +135,51 @@
             cursor: pointer;
             font-size: 1.2em;
             font-weight: bold;
-            transition: background 0.3s ease, transform 0.2s ease;
             width: 100%;
-        }
-
-        .login-button:hover {
-            background: #7a00b3; 
-            transform: translateY(-2px);
-        }
-
-        .login-button:disabled {
-            background: #555;
-            cursor: not-allowed;
-            transform: none;
-            opacity: 0.6;
         }
 
         .logo {
             margin-top: 40px;
             width: 200px;
-            height: auto;
             opacity: 0.9;
-            transition: opacity 0.3s ease;
-        }
-
-        .logo:hover {
-            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <div class="background">
-        <script>
-            // Efeito de chuva
-            const numDrops = 100;
-            for (let i = 0; i < numDrops; i++) {
-                let div = document.createElement('div');
-                div.classList.add('falling');
-                div.style.left = Math.random() * 100 + 'vw';
-                div.style.animationDuration = Math.random() * 2 + 3 + 's';
-                div.style.animationDelay = Math.random() * 5 + 's';
-                document.querySelector('.background').appendChild(div);
-            }
-        </script>
-    </div>
+    <div class="background" id="bg"></div>
 
     <div class="modal-overlay" id="termsModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>⚖️ Termos e Privacidade</h3>
-                <button class="close-modal" id="closeModalBtn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Ao adquirir ou utilizar nosso auxílio de mira, você concorda automaticamente com os termos listados abaixo. Leia com atenção:</strong></p>
-
-                <h4>1. NATUREZA DO PRODUTO</h4>
-                <p>O nosso produto é um estabilizador de mira via Webview/Script, focado em melhorar a experiência e a precisão do jogador mobile (estilo emulador).</p>
-                <ul>
-                    <li><strong>Não prometemos resultados mágicos:</strong> O software auxilia na redução de tremedeira e estabilidade, mas o desempenho final depende da habilidade do usuário.</li>
-                    <li><strong>Versão Beta/V1:</strong> Por ser uma ferramenta em constante evolução, o usuário entende que pequenas instabilidades podem ocorrer e devem ser reportadas no canal de feedback.</li>
-                </ul>
-
-                <h4>2. POLÍTICA DE REEMBOLSO E ESTORNO (IMPORTANTE)</h4>
-                <p>De acordo com a legislação vigente sobre produtos de consumo, informamos que:</p>
-                <ul>
-                    <li><strong>Entrega Imediata:</strong> Por se tratar de um produto digital de consumo instantâneo e entrega imediata, após o envio do acesso ou ativação do código hash, o serviço é considerado "prestado e usufruído".</li>
-                    <li><strong>Irreversibilidade:</strong> Uma vez que os códigos foram gerados e o acesso liberado, não realizamos estorno de valores (Pix ou Cartão), visto que não há como "devolver" um produto digital que já foi visualizado e utilizado.</li>
-                    <li><strong>Exceção:</strong> O reembolso só será avaliado em casos de falha técnica comprovada do sistema que impeça totalmente o uso, após tentativa de suporte técnico.</li>
-                </ul>
-
-                <h4>3. SEGURANÇA E RESPONSABILIDADE</h4>
-                <p>O auxílio funciona de forma externa, sem modificar os arquivos internos do jogo.</p>
-                <p>Embora utilizemos tecnologias indetectáveis (Hash Unity/Webview), o uso de qualquer ferramenta auxiliar em jogos competitivos é de inteira responsabilidade do usuário. Não nos responsabilizamos por punições aplicadas pelas desenvolvedoras dos jogos.</p>
-
-                <h4>4. PRIVACIDADE E DADOS</h4>
-                <p>Não coletamos dados pessoais sensíveis. Nosso sistema utiliza apenas o ID necessário para a validação da licença e o funcionamento do código hash via navegador.</p>
-                <p>Não compartilhamos suas informações com terceiros.</p>
-
-                <h4>5. ALTERAÇÕES E ATUALIZAÇÕES</h4>
-                <p>Reservamo-nos o direito de atualizar os códigos e os termos de uso para acompanhar as atualizações dos jogos e sistemas operacionais, garantindo a continuidade do serviço.</p>
-                
-                <p style="text-align: center; margin-top: 20px; color: #e066ff;"><strong>⚠️ Ao acessar, você declara que leu e aceita todos os termos acima.</strong></p>
-            </div>
+            <h3 style="color: #e066ff;">⚖️ Termos e Privacidade</h3>
+            <p>Ao adquirir ou utilizar nosso auxílio, você concorda que:</p>
+            <p>1. O produto é digital e de consumo imediato, portanto <strong>não há reembolso</strong> após a ativação da key.</p>
+            <p>2. O uso é de sua inteira responsabilidade.</p>
+            <button id="closeModalBtn" style="background:#9400d3; color:white; border:none; padding:10px; cursor:pointer; border-radius:5px;">Fechar e Aceitar</button>
         </div>
     </div>
 
     <div class="login-container">
         <h2>LOGIN</h2>
-        
         <input type="password" placeholder="Enter your Key" class="input-field" id="keyInput">
-        
         <div class="terms-container">
             <input type="checkbox" id="termsCheck">
-            <label for="termsCheck">
-                Li e concordo com os <span class="terms-link" id="openTermsBtn">Termos de Uso e Privacidade</span>
-            </label>
+            <label for="termsCheck">Li e concordo com os <span class="terms-link" id="openTermsBtn">Termos</span></label>
         </div>
-
         <button class="login-button" id="loginBtn">LOGIN</button>
-        <img src="https://i.postimg.cc/vZL6ChFw/Picsart-25-12-25-12-18-27-083.png" alt="Logo Nova" class="logo">
+        <img src="https://i.postimg.cc/vZL6ChFw/Picsart-25-12-25-12-18-27-083.png" alt="Logo" class="logo">
     </div>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
       import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-      // 1. LIMPEZA DE COOKIES AO ABRIR (Reset de Segurança)
-      // Remove qualquer cookie anterior para forçar um novo login.
+      // --- 1. SEGURANÇA MÁXIMA ---
+      // Sempre que entrar na página de login, limpamos TUDO (Cookies e Session)
+      // Isso garante que ele não consiga burlar voltando a página.
+      sessionStorage.clear();
       document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-      // Configuração do projeto 'keys-auxilio'
       const firebaseConfig = {
         apiKey: "AIzaSyDq42y0cA7bmCebXaZa5dKTJFMvIZTUtNI",
         authDomain: "keys-auxilio.firebaseapp.com",
@@ -350,116 +196,54 @@
       const input = document.getElementById('keyInput');
       const btn = document.getElementById('loginBtn');
       const termsCheck = document.getElementById('termsCheck');
-
-      // Lógica do Modal de Termos
       const modal = document.getElementById('termsModal');
-      const openBtn = document.getElementById('openTermsBtn');
-      const closeBtn = document.getElementById('closeModalBtn');
 
-      if(openBtn) {
-        openBtn.addEventListener('click', () => {
-            modal.classList.add('show');
-        });
-      }
+      // Modal Handlers
+      document.getElementById('openTermsBtn').onclick = () => modal.classList.add('show');
+      document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('show');
 
-      if(closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('show');
-        });
-      }
-
-      // Fecha ao clicar fora do modal
-      window.addEventListener('click', (e) => {
-          if (e.target === modal) {
-              modal.classList.remove('show');
-          }
-      });
-
-      btn.addEventListener('click', async (event) => {
-        event.preventDefault();
-
-        // Verificação do Checkbox
-        if (!termsCheck.checked) {
-            alert('⚠️ Você deve aceitar os Termos de Uso e Privacidade para fazer login.');
-            return;
-        }
-
+      btn.addEventListener('click', async () => {
+        if (!termsCheck.checked) return alert('Aceite os termos primeiro!');
         const entered = input.value.trim();
-        if (!entered) return alert('Por favor, digite a key.');
+        if (!entered) return alert('Digite a key!');
 
-        // Feedback visual de carregamento
-        btn.innerText = "Verificando...";
-        btn.style.opacity = "0.7";
-
+        btn.innerText = "Validando...";
+        
         try {
-          console.log("Buscando key..."); 
-          
-          const keysCollectionRef = collection(db, 'keys'); 
-          const q = query(keysCollectionRef, where('valor', '==', entered));
+          const q = query(collection(db, 'keys'), where('valor', '==', entered));
           const snapshot = await getDocs(q);
 
           if (!snapshot.empty) {
-            // Sucesso no login - Define o Cookie para o Middleware ler
-            // O path=/ garante que o cookie seja legível em todo o site
-            document.cookie = "isLoggedIn=true; path=/; samesite=strict";
+            // GRAVA O TOKEN NA SESSÃO DA ABA
+            // O auxilio.html só abre se esse valor exato existir lá
+            sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
             
+            // Opcional: Mantemos o cookie para o Middleware também funcionar
+            document.cookie = "isLoggedIn=true; path=/; samesite=strict";
+
             window.location.href = 'auxilio.html';
           } else {
-            alert('Key inválida ou não encontrada.');
+            alert('Key Inválida!');
             btn.innerText = "LOGIN";
-            btn.style.opacity = "1";
           }
-        } catch (err) {
-          console.error("Erro Firebase:", err);
-          if (err.code === 'permission-denied') {
-            alert('Erro de Permissão: Verifique as Regras do Firestore.');
-          } else {
-            alert('Erro ao verificar a key. Verifique sua conexão.');
-          }
+        } catch (e) {
+          alert('Erro na conexão com servidor.');
           btn.innerText = "LOGIN";
-          btn.style.opacity = "1";
         }
       });
     </script>
 
     <script>
-    (function antiDevTools() {
-        const redirectURL = "https://www.google.com"; // Redirecionamento se detectar DevTools
-
-        // 1. Bloqueio de Teclas de Atalho
-        document.addEventListener("keydown", (e) => {
-            if (
-                e.key === "F12" ||
-                (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key)) ||
-                (e.ctrlKey && ["U", "u"].includes(e.key))
-            ) {
-                e.preventDefault();
-                window.location.replace(redirectURL);
-            }
-        });
-
-        // 2. Bloqueio de Clique Direito
-        document.addEventListener("contextmenu", (e) => e.preventDefault());
-
-        // 3. Detecção de Console Aberto (Armadilha de Objeto)
-        let devtools = { open: false };
-        const element = new Image();
-        
-        Object.defineProperty(element, "id", {
-            get: function () {
-                // Se o navegador tentar ler o ID (o que acontece quando o console abre e inspeciona), detectamos.
-                devtools.open = true;
-                window.location.replace(redirectURL);
-            },
-        });
-
-        setInterval(function () {
-            devtools.open = false;
-            // Força o navegador a tentar ler as propriedades do elemento se o console estiver aberto
-            console.log(element);
-            console.clear();
-        }, 1000);
-    })();
+        // Efeito visual de chuva
+        const bg = document.getElementById('bg');
+        for (let i = 0; i < 50; i++) {
+            let drop = document.createElement('div');
+            drop.className = 'falling';
+            drop.style.left = Math.random() * 100 + 'vw';
+            drop.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            bg.appendChild(drop);
+        }
     </script>
 </body>
 </html>
