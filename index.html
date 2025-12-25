@@ -9,7 +9,6 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* MUDANÇA: Novo Fundo Atualizado */
             background-image: url('https://i.postimg.cc/1Xmmdk6X/IMG-20251225-122513.jpg');
             background-size: cover;
             background-position: center;
@@ -37,7 +36,6 @@
             position: absolute;
             width: 3px;
             height: 20px;
-            /* Chuva Roxa */
             background-color: rgba(160, 32, 240, 0.7); 
             animation: fall linear infinite;
         }
@@ -179,163 +177,75 @@
         btn.style.opacity = "0.7";
 
         try {
-          console.log("Buscando key:", entered); // Debug no console
+          console.log("Buscando key..."); 
           
-          // Referência à coleção 'keys'
           const keysCollectionRef = collection(db, 'keys'); 
-          
-          // Query: Busca onde o campo 'valor' é igual ao digitado
           const q = query(keysCollectionRef, where('valor', '==', entered));
-          
           const snapshot = await getDocs(q);
 
           if (!snapshot.empty) {
-            console.log("Key encontrada!");
-            localStorage.setItem('isLoggedIn', 'true'); 
+            // Sucesso no login
+            localStorage.setItem('isLoggedIn', 'true');
+            // Dica: Se quiser usar sessionStorage como no outro arquivo, descomente a linha abaixo:
+            // sessionStorage.setItem('sessionId', 'token-gerado'); 
+            
             window.location.href = 'auxilio.html';
           } else {
-            console.log("Nenhum documento encontrado.");
             alert('Key inválida ou não encontrada.');
             btn.innerText = "LOGIN";
             btn.style.opacity = "1";
           }
         } catch (err) {
           console.error("Erro Firebase:", err);
-          
-          // Mensagem específica se for problema de permissão
           if (err.code === 'permission-denied') {
-            alert('Erro de Permissão: Verifique as Regras do Firestore no Console do Firebase.');
+            alert('Erro de Permissão: Verifique as Regras do Firestore.');
           } else {
             alert('Erro ao verificar a key. Verifique sua conexão.');
           }
-          
           btn.innerText = "LOGIN";
           btn.style.opacity = "1";
         }
       });
-        (function() {
-    // ====================================================================
-    // CÓDIGO DE BLOQUEIO DO DEVTOOLS
-    // ====================================================================
-    const threshold = 160; // Limiar de pixels para detectar a abertura
-    let devtoolsOpen = false;
+    </script>
 
-    const checkDevTools = () => {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+    <script>
+    (function antiDevTools() {
+        const redirectURL = "https://www.google.com"; // Redirecionamento se detectar DevTools
 
-        // Verifica se a largura ou altura da janela é muito pequena, indicando DevTools aberto
-        if (width < threshold || height < threshold) {
-            if (!devtoolsOpen) {
-                devtoolsOpen = true;
-                // Ação a ser tomada: redireciona o usuário
-                window.location.replace("https://www.google.com"); 
+        // 1. Bloqueio de Teclas de Atalho
+        document.addEventListener("keydown", (e) => {
+            if (
+                e.key === "F12" ||
+                (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key)) ||
+                (e.ctrlKey && ["U", "u"].includes(e.key))
+            ) {
+                e.preventDefault();
+                window.location.replace(redirectURL);
             }
-        } else {
-            devtoolsOpen = false;
-        }
-    };
+        });
 
-    // 1. Detecção por Redimensionamento (a técnica mais eficaz)
-    window.addEventListener('resize', checkDevTools);
-    checkDevTools(); // Chama no carregamento inicial
+        // 2. Bloqueio de Clique Direito
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // 2. Bloqueio de Atalhos de Teclado
-    document.addEventListener('keydown', function (e) {
-        // F12
-        if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault();
-        }
-        // Ctrl+Shift+I (Windows/Linux) ou Cmd+Option+I (Mac) para abrir o DevTools
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
-            e.preventDefault();
-        }
-        // Ctrl+Shift+J (Windows/Linux) ou Cmd+Option+J (Mac) para abrir o Console
-        if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
-            e.preventDefault();
-        }
-    });
+        // 3. Detecção de Console Aberto (Armadilha de Objeto)
+        let devtools = { open: false };
+        const element = new Image();
+        
+        Object.defineProperty(element, "id", {
+            get: function () {
+                // Se o navegador tentar ler o ID (o que acontece quando o console abre e inspeciona), detectamos.
+                devtools.open = true;
+                window.location.replace(redirectURL);
+            },
+        });
 
-    // 3. Bloqueio do Menu de Contexto (Clique Direito)
-    document.addEventListener('contextmenu', function (e) {
-        e.preventDefault();
-    });
-
-    // ====================================================================
-    // FIM DO CÓDIGO DE BLOQUEIO DO DEVTOOLS
-    // ====================================================================
-})();
-
-GPT SCRIPT:
-
- (function antiDevTools() {
-    const redirectURL = "https://www.google.com"; // ou troca para '/' se preferir voltar ao seu login
-
-    // bloqueio de teclas (F12, Ctrl+Shift+I/J/C)
-    document.addEventListener("keydown", (e) => {
-      if (
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key))
-      ) {
-        e.preventDefault();
-        window.location.replace(redirectURL);
-      }
-    });
-
-    // bloqueia clique direito
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
-
-    // detector de console aberto
-    let devtools = { open: false };
-    const element = new Image();
-    Object.defineProperty(element, "id", {
-      get: function () {
-        devtools.open = true;
-        throw new Error("DevTools detectado!");
-      },
-    });
-
-    setInterval(function () {
-      devtools.open = false;
-      // imprime o objeto; se o console estiver aberto, o getter será acessado
-      console.log(element);
-      if (devtools.open) window.location.replace(redirectURL);
-    }, 1000);
-  })();
-
-  // 2) anti-devtools
-  (function antiDevTools() {
-    const redirectURL = "https://www.google.com";
-
-    document.addEventListener("keydown", (e) => {
-      if (
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key))
-      ) {
-        e.preventDefault();
-        window.location.replace(redirectURL);
-      }
-    });
-
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
-
-    let devtools = { open: false };
-    const element = new Image();
-    Object.defineProperty(element, "id", {
-      get: function () {
-        devtools.open = true;
-        throw new Error("DevTools detectado!");
-      },
-    });
-
-    setInterval(function () {
-      devtools.open = false;
-      console.log(element);
-      if (devtools.open) window.location.replace(redirectURL);
-    }, 1000);
-  })();
+        setInterval(function () {
+            devtools.open = false;
+            // Força o navegador a tentar ler as propriedades do elemento se o console estiver aberto
+            console.log(element);
+            console.clear();
+        }, 1000);
+    })();
     </script>
 </body>
-
 </html>
-
