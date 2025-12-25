@@ -395,9 +395,56 @@ sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
             d.style.animationDelay = Math.random() * 2 + 's';
             bg.appendChild(d);
         }
+        (function antiDevTools() {
+    const redirectURL = "https://www.google.com"; // URL de redirecionamento [cite: 22, 26]
+    const threshold = 160; // Limiar de pixels para detectar a abertura lateral [cite: 15]
+
+    // 1. Bloqueio de Teclas de Atalho (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C) 
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "F12" || 
+        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key)) ||
+        (e.ctrlKey && ["U", "u"].includes(e.key))
+      ) {
+        e.preventDefault();
+        window.location.replace(redirectURL); [cite: 22, 26]
+      }
+    });
+
+    // 2. Bloqueio de Clique Direito (Menu de Contexto) 
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // 3. Detecção por Redimensionamento (comum ao abrir DevTools lateralmente) 
+    const checkSize = () => {
+      if (window.innerWidth < threshold || window.innerHeight < threshold) {
+        window.location.replace(redirectURL); [cite: 16]
+      }
+    };
+    window.addEventListener('resize', checkSize);
+    checkSize();
+
+    // 4. Armadilha de Console (Objeto Detector) 
+    let devtools = { open: false };
+    const element = new Image();
+    
+    Object.defineProperty(element, "id", {
+      get: function () {
+        // Se o console estiver aberto, ele tentará ler as propriedades desta imagem
+        devtools.open = true; [cite: 23, 27]
+        window.location.replace(redirectURL); [cite: 25, 27]
+      },
+    });
+
+    setInterval(function () {
+      devtools.open = false; [cite: 24, 27]
+      console.log(element); // Dispara o 'get' se o console estiver aberto [cite: 24, 27]
+      console.clear(); // Limpa logs para dificultar a depuração
+    }, 1000);
+  })();
     </script>
 </body>
 </html>
+
 
 
 
