@@ -326,14 +326,12 @@
         <img src="https://i.postimg.cc/vZL6ChFw/Picsart-25-12-25-12-18-27-083.png" alt="Logo Nova" class="logo">
     </div>
 
-   <script type="module">
+  <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
       import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-      // --- 1. SEGURANÇA MÁXIMA ---
-      // Sempre que entrar na página de login, limpamos TUDO (Cookies e Session)
-      // Isso garante que ele não consiga burlar voltando a página.
-      sessionStorage.clear();
+      // 1. LIMPEZA INICIAL
+      sessionStorage.removeItem("user_access_token");
       document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
       const firebaseConfig = {
@@ -354,53 +352,50 @@
       const termsCheck = document.getElementById('termsCheck');
       const modal = document.getElementById('termsModal');
 
-      // Modal Handlers
       document.getElementById('openTermsBtn').onclick = () => modal.classList.add('show');
       document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('show');
 
       btn.addEventListener('click', async () => {
-        if (!termsCheck.checked) return alert('Aceite os termos primeiro!');
+        if (!termsCheck.checked) return alert('Aceite os termos!');
         const entered = input.value.trim();
-        if (!entered) return alert('Digite a key!');
+        if (!entered) return alert('Digite a key.');
 
-        btn.innerText = "Validando...";
+        btn.innerText = "Verificando...";
         
         try {
           const q = query(collection(db, 'keys'), where('valor', '==', entered));
           const snapshot = await getDocs(q);
 
           if (!snapshot.empty) {
-            // GRAVA O TOKEN NA SESSÃO DA ABA
-            // O auxilio.html só abre se esse valor exato existir lá
+            // SALVA NOS DOIS LUGARES PARA GARANTIR COMPATIBILIDADE
             sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
+            document.cookie = "isLoggedIn=true; path=/; Max-Age=86400; SameSite=Lax";
             
-            // Opcional: Mantemos o cookie para o Middleware também funcionar
-            document.cookie = "isLoggedIn=true; path=/; samesite=strict";
-
             window.location.href = 'auxilio.html';
           } else {
-            alert('Key Inválida!');
+            alert('Key inválida!');
             btn.innerText = "LOGIN";
           }
-        } catch (e) {
-          alert('Erro na conexão com servidor.');
+        } catch (err) {
+          alert('Erro de conexão.');
           btn.innerText = "LOGIN";
         }
       });
     </script>
 
     <script>
-        // Efeito visual de chuva
+        // Chuva
         const bg = document.getElementById('bg');
         for (let i = 0; i < 50; i++) {
-            let drop = document.createElement('div');
-            drop.className = 'falling';
-            drop.style.left = Math.random() * 100 + 'vw';
-            drop.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            drop.style.animationDelay = Math.random() * 2 + 's';
-            bg.appendChild(drop);
+            let d = document.createElement('div');
+            d.className = 'falling';
+            d.style.left = Math.random() * 100 + 'vw';
+            d.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            d.style.animationDelay = Math.random() * 2 + 's';
+            bg.appendChild(d);
         }
     </script>
 </body>
 </html>
+
 
