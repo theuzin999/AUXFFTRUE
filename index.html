@@ -41,8 +41,14 @@
         }
 
         @keyframes fall {
-            0% { transform: translateY(-20px); opacity: 0.8; }
-            100% { transform: translateY(100vh); opacity: 0; }
+            0% {
+                transform: translateY(-20px);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
 
         .login-container {
@@ -76,6 +82,11 @@
             color: #ffffff;
             font-size: 1.1em;
             outline: none;
+            transition: border-bottom 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-bottom: 2px solid #e066ff; 
         }
 
         .terms-container {
@@ -93,26 +104,39 @@
             margin-right: 8px;
             margin-top: 3px;
             accent-color: #9400d3;
+            cursor: pointer;
         }
 
         .terms-link {
             color: #e066ff;
             text-decoration: underline;
             cursor: pointer;
+            transition: color 0.2s;
         }
 
-        /* Modal Styles */
+        .terms-link:hover {
+            color: #ffffff;
+        }
+
         .modal-overlay {
-            display: none;
+            display: none; 
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.show { display: flex; }
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
 
         .modal-content {
             background: #1a1a1a;
@@ -121,8 +145,67 @@
             max-height: 80vh;
             border-radius: 10px;
             border: 1px solid #9400d3;
-            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(148, 0, 211, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 15px;
+            background: #2a0a3a;
+            border-bottom: 1px solid #9400d3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #e066ff;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .modal-body {
             padding: 20px;
+            overflow-y: auto;
+            text-align: left;
+            color: #ddd;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .modal-body h4 {
+            color: #e066ff;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 3px;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #9400d3;
+            border-radius: 4px;
+        }
+        .modal-body::-webkit-scrollbar-track {
+            background: #111;
         }
 
         .login-button {
@@ -135,27 +218,55 @@
             cursor: pointer;
             font-size: 1.2em;
             font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease;
             width: 100%;
+        }
+
+        .login-button:hover {
+            background: #7a00b3; 
+            transform: translateY(-2px);
         }
 
         .logo {
             margin-top: 40px;
             width: 200px;
+            height: auto;
             opacity: 0.9;
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
 <body>
 
-    <div class="background" id="bg"></div>
+    <div class="background">
+        <script>
+            const numDrops = 100;
+            for (let i = 0; i < numDrops; i++) {
+                let div = document.createElement('div');
+                div.classList.add('falling');
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.animationDuration = Math.random() * 2 + 3 + 's';
+                div.style.animationDelay = Math.random() * 5 + 's';
+                document.querySelector('.background').appendChild(div);
+            }
+        </script>
+    </div>
 
     <div class="modal-overlay" id="termsModal">
         <div class="modal-content">
-            <h3 style="color: #e066ff;">⚖️ Termos e Privacidade</h3>
-            <p>Ao adquirir ou utilizar nosso auxílio, você concorda que:</p>
-            <p>1. O produto é digital e de consumo imediato, portanto <strong>não há reembolso</strong> após a ativação da key.</p>
-            <p>2. O uso é de sua inteira responsabilidade.</p>
-            <button id="closeModalBtn" style="background:#9400d3; color:white; border:none; padding:10px; cursor:pointer; border-radius:5px;">Fechar e Aceitar</button>
+            <div class="modal-header">
+                <h3>⚖️ Termos e Privacidade</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Ao adquirir ou utilizar nosso auxílio de mira, você concorda automaticamente com os termos listados abaixo:</strong></p>
+                <h4>1. NATUREZA DO PRODUTO</h4>
+                <p>O nosso produto é um estabilizador de mira via Webview/Script.</p>
+                <h4>2. POLÍTICA DE REEMBOLSO</h4>
+                <p>Produto digital de entrega imediata. Não realizamos estorno após a ativação.</p>
+                <h4>3. SEGURANÇA</h4>
+                <p>O uso é de inteira responsabilidade do usuário.</p>
+            </div>
         </div>
     </div>
 
@@ -164,19 +275,19 @@
         <input type="password" placeholder="Enter your Key" class="input-field" id="keyInput">
         <div class="terms-container">
             <input type="checkbox" id="termsCheck">
-            <label for="termsCheck">Li e concordo com os <span class="terms-link" id="openTermsBtn">Termos</span></label>
+            <label for="termsCheck">
+                Li e concordo com os <span class="terms-link" id="openTermsBtn">Termos de Uso</span>
+            </label>
         </div>
         <button class="login-button" id="loginBtn">LOGIN</button>
-        <img src="https://i.postimg.cc/vZL6ChFw/Picsart-25-12-25-12-18-27-083.png" alt="Logo" class="logo">
+        <img src="https://i.postimg.cc/vZL6ChFw/Picsart-25-12-25-12-18-27-083.png" alt="Logo Nova" class="logo">
     </div>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
       import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-      // --- 1. SEGURANÇA MÁXIMA ---
-      // Sempre que entrar na página de login, limpamos TUDO (Cookies e Session)
-      // Isso garante que ele não consiga burlar voltando a página.
+      // --- SEGURANÇA: LIMPA TUDO AO ENTRAR NO INDEX ---
       sessionStorage.clear();
       document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
@@ -197,53 +308,65 @@
       const btn = document.getElementById('loginBtn');
       const termsCheck = document.getElementById('termsCheck');
       const modal = document.getElementById('termsModal');
+      const openBtn = document.getElementById('openTermsBtn');
+      const closeBtn = document.getElementById('closeModalBtn');
 
-      // Modal Handlers
-      document.getElementById('openTermsBtn').onclick = () => modal.classList.add('show');
-      document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('show');
+      openBtn.onclick = () => modal.classList.add('show');
+      closeBtn.onclick = () => modal.classList.remove('show');
+      window.onclick = (e) => { if (e.target === modal) modal.classList.remove('show'); };
 
-      btn.addEventListener('click', async () => {
-        if (!termsCheck.checked) return alert('Aceite os termos primeiro!');
+      btn.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        if (!termsCheck.checked) {
+            alert('⚠️ Aceite os termos para logar.');
+            return;
+        }
+
         const entered = input.value.trim();
-        if (!entered) return alert('Digite a key!');
+        if (!entered) return alert('Digite a key.');
 
-        btn.innerText = "Validando...";
-        
+        btn.innerText = "Verificando...";
+        btn.style.opacity = "0.7";
+
         try {
           const q = query(collection(db, 'keys'), where('valor', '==', entered));
           const snapshot = await getDocs(q);
 
           if (!snapshot.empty) {
-            // GRAVA O TOKEN NA SESSÃO DA ABA
-            // O auxilio.html só abre se esse valor exato existir lá
+            // SUCESSO: SALVA NA SESSÃO DA ABA
             sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
-            
-            // Opcional: Mantemos o cookie para o Middleware também funcionar
+            // Também seta o cookie para o middleware
             document.cookie = "isLoggedIn=true; path=/; samesite=strict";
-
+            
             window.location.href = 'auxilio.html';
           } else {
-            alert('Key Inválida!');
+            alert('Key inválida.');
             btn.innerText = "LOGIN";
+            btn.style.opacity = "1";
           }
-        } catch (e) {
-          alert('Erro na conexão com servidor.');
+        } catch (err) {
+          alert('Erro de conexão.');
           btn.innerText = "LOGIN";
+          btn.style.opacity = "1";
         }
       });
     </script>
 
     <script>
-        // Efeito visual de chuva
-        const bg = document.getElementById('bg');
-        for (let i = 0; i < 50; i++) {
-            let drop = document.createElement('div');
-            drop.className = 'falling';
-            drop.style.left = Math.random() * 100 + 'vw';
-            drop.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            drop.style.animationDelay = Math.random() * 2 + 's';
-            bg.appendChild(drop);
-        }
+    (function antiDevTools() {
+        const redirectURL = "https://www.google.com";
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key.toUpperCase() === "U")) {
+                e.preventDefault();
+                window.location.replace(redirectURL);
+            }
+        });
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
+        const element = new Image();
+        Object.defineProperty(element, "id", { get: function () { window.location.replace(redirectURL); } });
+        setInterval(() => { console.log(element); console.clear(); }, 1000);
+    })();
     </script>
 </body>
 </html>
