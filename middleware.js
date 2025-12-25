@@ -1,7 +1,7 @@
 export default async function middleware(req) {
   const url = new URL(req.url);
   const path = url.pathname;
-  const protegidas = ["/dashboard.html", "/planilha.html", "/bot2x.html"];
+  const protegidas = ["/index.html", "/auxilio.html", "/auxílio.html"];
 
   // Bloqueio de robôs (HTTrack, wget, curl, etc.)
   const ua = (req.headers.get("user-agent") || "").toLowerCase();
@@ -41,3 +41,4 @@ export default async function middleware(req) {
     return Response.redirect(new URL("/", req.url), 302);
   }
 }
+
