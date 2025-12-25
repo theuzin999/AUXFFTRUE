@@ -369,7 +369,8 @@
           if (!snapshot.empty) {
             // SALVA NOS DOIS LUGARES PARA GARANTIR COMPATIBILIDADE
             sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
-            document.cookie = "isLoggedIn=true; path=/; Max-Age=86400; SameSite=Lax";
+            document.cookie = "isLoggedIn=true; path=/; samesite=strict";
+sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
             
             window.location.href = 'auxilio.html';
           } else {
@@ -397,5 +398,6 @@
     </script>
 </body>
 </html>
+
 
 
