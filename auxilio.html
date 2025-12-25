@@ -195,7 +195,8 @@
       margin-top: 15px;
       background: #000;
       border-radius: 6px;
-      height: 200px;
+      /* AUMENTADO DE 200px PARA 350px */
+      height: 350px;
       overflow: hidden;
       position: relative;
       border: 1px solid #333;
@@ -212,9 +213,10 @@
       width: 100%;
       top: 0;
       line-height: 1.5;
+      /* Transição suave removida no CSS para ser controlada totalmente via JS para precisão */
     }
 
-    /* Linha de Scanner que fica subindo e descendo */
+    /* Linha de Scanner */
     .scan-line {
       position: absolute;
       width: 100%;
@@ -344,6 +346,164 @@
       nomeFuncaoSelecionada = element.querySelector('.func-name').innerText;
       
       document.getElementById('logs').innerHTML = `> ALVO: ${nomeFuncaoSelecionada}<br>> ARQUIVO: ${arquivo}<br>> STATUS: PRONTO`;
+      // Reseta a posição do log visualmente
+      document.getElementById('logs').style.top = "0px";
+    }
+
+    // Função principal
+    async function alternarInjecao() {
+      const btn = document.getElementById('btnInject');
+      const logElement = document.getElementById('logs');
+      const line = document.getElementById('line');
+
+      // Se já estiver rodando, para tudo
+      if (injecaoAtiva) {
+        pararInjecao(btn, logElement, line);
+        return;
+      }
+
+      // Validação
+      if (!arquivoSelecionado) {
+        alert("⚠️ ERRO: Selecione uma função primeiro!");
+        return;
+      }
+
+      // Iniciar
+      injecaoAtiva = true;
+      btn.innerText = "PARAR INJEÇÃO";
+      btn.classList.add('stop');
+      line.style.display = "block";
+      
+      try {
+        logElement.innerHTML = `> LENDO ${arquivoSelecionado}...`;
+        
+        // Fetch real sem fallback
+        const response = await fetch(arquivoSelecionado);
+        if (!response.ok) throw new Error("Erro de Leitura");
+        const rawText = await response.text();
+
+        // Repete apenas 3 vezes para garantir que tenha scroll, mas não fique impossível de chegar ao fim
+        let finalText = "";
+        for(let i=0; i<3; i++) {
+           finalText += `\n/* LEITURA BLOCO ${i+1} */\n` + rawText + "\n";
+        }
+        
+        logElement.innerText = finalText;
+        
+        // Inicia o Loop Ping-Pong (Sobe e Desce)
+        iniciarLoopPingPong(logElement);
+
+      } catch (err) {
+        logElement.innerText = `> ERRO CRÍTICO:\n> Não foi possível ler ${arquivoSelecionado}.\n> Verifique se o arquivo existe.`;
+        pararInjecao(btn, logElement, line);
+      }
+    }
+
+    function iniciarLoopPingPong(element) {
+      let currentTop = 0;
+      let direction = -1; // -1 significa que o texto está subindo (lendo para baixo), 1 significa voltando ao topo
+      const speed = 2; // Velocidade do scroll
+
+      // Limpa anterior se existir
+      if(scrollInterval) clearInterval(scrollInterval);
+
+      scrollInterval = setInterval(() => {
+        if (!injecaoAtiva) return;
+
+        const containerHeight = element.parentElement.clientHeight;
+        const contentHeight = element.scrollHeight;
+        
+        // Se o texto for menor que a caixa, não faz scroll
+        if (contentHeight <= containerHeight) return;
+
+        // Limite máximo que o Top pode chegar negativo (final do texto)
+        const maxScroll = -(contentHeight - containerHeight);
+
+        // Atualiza a posição baseada na direção
+        // Se direction é -1, estamos subtraindo (texto sobe, lemos para baixo)
+        // Se direction é 1, estamos somando (texto desce, voltamos ao topo)
+        currentTop += (speed * direction);
+
+        // Lógica de colisão
+        if (direction === -1) {
+            // Estamos descendo o olhar (texto subindo, top ficando mais negativo)
+            if (currentTop <= maxScroll) {
+                currentTop = maxScroll; // Trava no fundo
+                direction = 1; // Inverte para subir
+            }
+        } else {
+            // Estamos voltando ao topo (texto descendo, top indo para 0)
+            if (currentTop >= 0) {
+                currentTop = 0; // Trava no topo
+                direction = -1; // Inverte para descer de novo
+            }
+        }
+        
+        // Aplica o movimento
+        element.style.top = `${currentTop}px`;
+        
+      }, 20); // ~50fps
+    }
+
+    function pararInjecao(btn, logElement, line) {
+      injecaoAtiva = false;
+      if(scrollInterval) clearInterval(scrollInterval);
+      
+      btn.innerText = "INJETAR SCRIPT";
+      btn.classList.remove('stop');
+      line.style.display = "none";
+      
+      // Opcional: Voltar ao topo quando para
+      // logElement.style.top = "0px"; 
+      
+      logElement.innerHTML += `\n\n> PROCESSO INTERROMPIDO PELO USUÁRIO.`;
+      // Rola para o final para mostrar a mensagem de parada
+      logElement.style.top = `-${logElement.scrollHeight - logElement.parentElement.clientHeight}px`;
+    }
+  </script>
+</body>
+</html>
+98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <span class="func-name">M1014 Trick</span>
+      </div>
+
+      <div class="func-item" onclick="selectFunction(this, 'clttrick.js')">
+        <div class="checkbox-custom"></div>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+        <span class="func-name">CLT Trick</span>
+      </div>
+    </div>
+
+    <button class="btn-inject" id="btnInject" onclick="alternarInjecao()">INJETAR SCRIPT</button>
+
+    <div id="scanner-container">
+      <div class="scan-line" id="line"></div>
+      <div id="logs">
+        > MTZ SYSTEM READY...<br>
+        > AGUARDANDO COMANDO...
+      </div>
+    </div>
+
+    <div class="footer">MTZ INJECTOR • PRIVATE VERSION</div>
+  </main>
+
+  <script>
+    let arquivoSelecionado = "";
+    let nomeFuncaoSelecionada = "";
+    let injecaoAtiva = false;
+    let scrollInterval = null;
+    
+    // Sistema de seleção
+    function selectFunction(element, arquivo) {
+      if(injecaoAtiva) return; // Trava seleção se estiver rodando
+      
+      document.querySelectorAll('.func-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      
+      arquivoSelecionado = arquivo;
+      nomeFuncaoSelecionada = element.querySelector('.func-name').innerText;
+      
+      document.getElementById('logs').innerHTML = `> ALVO: ${nomeFuncaoSelecionada}<br>> ARQUIVO: ${arquivo}<br>> STATUS: PRONTO`;
     }
 
     // Função principal
@@ -432,4 +592,5 @@
     }
   </script>
 </body>
+
 </html>
