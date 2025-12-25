@@ -437,6 +437,150 @@
       }
       return t;
     }
+    (function() {
+    // ====================================================================
+    // CÓDIGO DE BLOQUEIO DO DEVTOOLS
+    // ====================================================================
+    const threshold = 160; // Limiar de pixels para detectar a abertura
+    let devtoolsOpen = false;
+
+    const checkDevTools = () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Verifica se a largura ou altura da janela é muito pequena, indicando DevTools aberto
+        if (width < threshold || height < threshold) {
+            if (!devtoolsOpen) {
+                devtoolsOpen = true;
+                // Ação a ser tomada: redireciona o usuário
+                window.location.replace("https://www.google.com"); 
+            }
+        } else {
+            devtoolsOpen = false;
+        }
+    };
+
+    // 1. Detecção por Redimensionamento (a técnica mais eficaz)
+    window.addEventListener('resize', checkDevTools);
+    checkDevTools(); // Chama no carregamento inicial
+
+    // 2. Bloqueio de Atalhos de Teclado
+    document.addEventListener('keydown', function (e) {
+        // F12
+        if (e.key === 'F12' || e.keyCode === 123) {
+            e.preventDefault();
+        }
+        // Ctrl+Shift+I (Windows/Linux) ou Cmd+Option+I (Mac) para abrir o DevTools
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+            e.preventDefault();
+        }
+        // Ctrl+Shift+J (Windows/Linux) ou Cmd+Option+J (Mac) para abrir o Console
+        if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
+            e.preventDefault();
+        }
+    });
+
+    // 3. Bloqueio do Menu de Contexto (Clique Direito)
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // ====================================================================
+    // FIM DO CÓDIGO DE BLOQUEIO DO DEVTOOLS
+    // ====================================================================
+})();
+
+
+
+
+
+
+
+GPT SCRIPT:
+
+ (function antiDevTools() {
+    const redirectURL = "https://www.google.com"; // ou troca para '/' se preferir voltar ao seu login
+
+    // bloqueio de teclas (F12, Ctrl+Shift+I/J/C)
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key))
+      ) {
+        e.preventDefault();
+        window.location.replace(redirectURL);
+      }
+    });
+
+    // bloqueia clique direito
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // detector de console aberto
+    let devtools = { open: false };
+    const element = new Image();
+    Object.defineProperty(element, "id", {
+      get: function () {
+        devtools.open = true;
+        throw new Error("DevTools detectado!");
+      },
+    });
+
+    setInterval(function () {
+      devtools.open = false;
+      // imprime o objeto; se o console estiver aberto, o getter será acessado
+      console.log(element);
+      if (devtools.open) window.location.replace(redirectURL);
+    }, 1000);
+  })();
+
+
+
+
+
+DEV+LOGUIN
+
+<script>
+  // 1) checa session
+  (function requireSession() {
+    const token = sessionStorage.getItem('sessionId');
+    if (!token) {
+      window.location.replace('/');
+      return;
+    }
+  })();
+
+  // 2) anti-devtools
+  (function antiDevTools() {
+    const redirectURL = "https://www.google.com";
+
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key))
+      ) {
+        e.preventDefault();
+        window.location.replace(redirectURL);
+      }
+    });
+
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    let devtools = { open: false };
+    const element = new Image();
+    Object.defineProperty(element, "id", {
+      get: function () {
+        devtools.open = true;
+        throw new Error("DevTools detectado!");
+      },
+    });
+
+    setInterval(function () {
+      devtools.open = false;
+      console.log(element);
+      if (devtools.open) window.location.replace(redirectURL);
+    }, 1000);
+  })();
   </script>
 </body>
 </html>
+
