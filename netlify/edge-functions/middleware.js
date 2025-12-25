@@ -2,8 +2,9 @@ export default async function middleware(req, context) {
   const url = new URL(req.url);
   const ua = (req.headers.get("user-agent") || "").toLowerCase();
   const referer = req.headers.get("referer") || "";
+  const cookies = req.headers.get("cookie") || "";
 
-  // 1. LISTA NEGRA DE FERRAMENTAS DE CÓPIA (HTTrack detectado no seu print)
+  // 1. LISTA NEGRA DE FERRAMENTAS DE CÓPIA
   const blacklistedUA = [
     "httrack", "wget", "curl", "offline explorer", 
     "site-grabber", "teleport", "webcopier", "python-requests"
@@ -14,27 +15,32 @@ export default async function middleware(req, context) {
   }
 
   // 2. PROTEÇÃO DE SCRIPTS (.js)
-  // Bloqueia se tentarem acessar o arquivo JS diretamente fora do seu site
   if (url.pathname.endsWith(".js")) {
+    // Permite acesso se for interno (mesmo host) OU se o cookie de login estiver presente
     const isInternal = referer.includes(url.hostname);
-    if (!isInternal && !ua.includes("mozilla")) { 
+    if (!isInternal && !cookies.includes("isLoggedIn=true")) { 
       return new Response("Acesso direto a scripts bloqueado.", { status: 403 });
     }
   }
 
   // 3. PROTEÇÃO DA PÁGINA AUXILIO.HTML
-  const protegidas = ["/auxilio.html", "/auxílio.html"];
-  if (protegidas.includes(url.pathname)) {
-    const cookies = req.headers.get("cookie") || "";
-    // Verifica se existe o token de sessão que você define no login
+  // Bloqueia qualquer variação da página de auxílio
+  const protegidas = ["/auxilio.html", "/auxílio.html", "/auxilio", "/auxílio"];
+  
+  if (protegidas.some(path => url.pathname.startsWith(path))) {
+    // Verifica estritamente se o cookie isLoggedIn=true existe
     if (!cookies.includes("isLoggedIn=true")) {
+      // Se não tiver o cookie, chuta de volta para o index
       return Response.redirect(new URL("/index.html", req.url), 302);
     }
   }
 
-  return; // Continua para a página normalmente
+  // 4. Se acessar a raiz (Index), opcionalmente não fazemos nada, 
+  // pois o script do index.html já vai limpar os cookies.
+
+  return; // Continua normalmente
 }
 
 export const config = {
-  path: "/*", // Aplica o middleware em todas as rotas do site
+  matcher: ["/((?!_next/static|favicon.ico).*)"], // Aplica em tudo exceto arquivos estáticos do next (se houver) e favicon
 };
