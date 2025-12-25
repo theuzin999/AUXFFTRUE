@@ -436,8 +436,62 @@ sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
       
     })();
     </script>
+    <script>
+  (function antiDevTools() {
+    const redirectURL = "https://www.google.com";
+
+    // 1. Bloqueio de teclas de atalho (F12, Ctrl+Shift+I/J/C) [cite: 8]
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key)) ||
+        (e.ctrlKey && ["U", "u"].includes(e.key))
+      ) {
+        e.preventDefault();
+        window.location.replace(redirectURL);
+      }
+    });
+
+    // 2. Bloqueia clique direito [cite: 9]
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // 3. Detecção por redimensionamento (Detecta DevTools lateral ou inferior) [cite: 1, 2]
+    const threshold = 160;
+    const checkDevTools = () => {
+      if (window.innerWidth < threshold || window.innerHeight < threshold) {
+        window.location.replace(redirectURL);
+      }
+    };
+    window.addEventListener('resize', checkDevTools);
+    checkDevTools();
+
+    // 4. Debugger Infinito (Trava o console de quem tentar abrir) [cite: 9]
+    setInterval(function() {
+      (function() {
+        return false;
+      }['constructor']('debugger')['call']());
+    }, 50);
+
+    // 5. Detector de console aberto via armadilha de objeto [cite: 10, 11]
+    let devtools = { open: false };
+    const element = new Image();
+    Object.defineProperty(element, "id", {
+      get: function () {
+        devtools.open = true;
+        window.location.replace(redirectURL);
+      },
+    });
+
+    setInterval(function () {
+      devtools.open = false;
+      console.log(element); // Se o console abrir, o navegador lê o 'id' e dispara o redirecionamento [cite: 11]
+      console.clear();
+    }, 1000);
+  })();
+</script>
 </body>
 </html>
+
 
 
 
