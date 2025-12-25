@@ -3,14 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MTZ INJECTOR | PURPLE</title>
+  <title>MTZ INJECTOR | MOBILE FIX</title>
   <style>
     :root {
-      /* Paleta de Cores Roxa - MTZ Style */
       --primary: #9b26b6;
       --primary-glow: #d63af9;
-      --dark-bg: rgba(10, 10, 10, 0.95);
-      --card-bg: rgba(20, 20, 20, 0.9);
+      --card-bg: rgba(15, 15, 15, 0.95);
       --text: #ffffff;
       --border: #4a148c;
     }
@@ -18,6 +16,8 @@
     * {
       box-sizing: border-box;
       user-select: none;
+      margin: 0;
+      padding: 0;
     }
 
     body {
@@ -29,103 +29,80 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      backdrop-filter: blur(2px);
+      overflow: hidden; /* Evita rolagem da página inteira */
     }
 
-    /* Overlay escuro para melhorar contraste */
+    /* Overlay escuro */
     body::before {
       content: "";
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       z-index: -1;
     }
 
+    /* Card Principal */
     .card {
       background: var(--card-bg);
-      width: 95%;
-      max-width: 450px;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(155, 38, 182, 0.4);
+      width: 90%; /* Ajuste para mobile */
+      max-width: 400px;
+      height: 90vh; /* Ocupa quase toda altura da tela */
+      padding: 20px;
+      border-radius: 15px;
       border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      box-shadow: 0 0 40px rgba(155, 38, 182, 0.3);
+      position: relative;
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 22px;
       text-align: center;
       color: var(--primary-glow);
-      text-transform: uppercase;
       font-weight: 800;
-      letter-spacing: 3px;
-      margin: 0 0 10px 0;
-      text-shadow: 0 0 15px var(--primary);
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px var(--primary);
+      flex-shrink: 0;
     }
 
     /* Grid das Funções */
     .function-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      max-height: 300px;
+      gap: 8px;
       overflow-y: auto;
-      padding-right: 5px;
+      padding: 5px;
+      flex-shrink: 0; /* Não deixa encolher demais */
+      max-height: 35%; /* Ocupa 35% do card */
     }
 
-    /* Scrollbar estilizada */
-    .function-grid::-webkit-scrollbar {
-      width: 4px;
-    }
-    .function-grid::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 5px;
-    }
-    .function-grid::-webkit-scrollbar-track {
-      background: #000;
-    }
+    .function-grid::-webkit-scrollbar { width: 3px; }
+    .function-grid::-webkit-scrollbar-thumb { background: var(--primary); }
 
-    /* Item da função */
     .func-item {
       display: flex;
       align-items: center;
       background: rgba(40, 40, 40, 0.6);
       border: 1px solid #333;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 11px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .func-item:hover {
-      border-color: var(--primary);
-      background: rgba(60, 60, 60, 0.8);
     }
 
     .func-item.active {
       border-color: var(--primary-glow);
-      background: rgba(155, 38, 182, 0.25);
-      box-shadow: 0 0 10px rgba(155, 38, 182, 0.3);
+      background: rgba(155, 38, 182, 0.2);
     }
 
-    /* Checkbox visual */
     .checkbox-custom {
-      width: 16px;
-      height: 16px;
-      border: 2px solid #777;
-      border-radius: 4px;
-      margin-right: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: 0.2s;
-      flex-shrink: 0;
+      width: 14px; height: 14px;
+      border: 1px solid #777;
+      margin-right: 8px;
+      display: flex; justify-content: center; align-items: center;
+      border-radius: 3px;
     }
 
     .func-item.active .checkbox-custom {
@@ -133,33 +110,7 @@
       border-color: var(--primary-glow);
     }
 
-    .checkbox-custom::after {
-      content: '✔';
-      font-size: 10px;
-      color: white;
-      display: none;
-    }
-
-    .func-item.active .checkbox-custom::after {
-      display: block;
-    }
-
-    /* Ícones SVG */
-    .icon {
-      width: 18px;
-      height: 18px;
-      fill: #eee;
-      margin-right: 8px;
-      flex-shrink: 0;
-    }
-
-    .func-name {
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: #fff;
-    }
+    .func-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
     /* Botão */
     .btn-inject {
@@ -167,79 +118,62 @@
       background: linear-gradient(90deg, #7b1fa2, #ba68c8);
       color: white;
       border: none;
-      padding: 15px;
+      padding: 12px;
       border-radius: 8px;
       font-weight: 900;
       cursor: pointer;
-      font-size: 16px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: 0.3s;
-      box-shadow: 0 0 15px rgba(156, 39, 176, 0.5);
-      margin-top: 10px;
+      font-size: 14px;
+      margin: 15px 0;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    }
-
-    .btn-inject:hover {
-      box-shadow: 0 0 25px rgba(156, 39, 176, 0.8);
-      filter: brightness(1.1);
+      flex-shrink: 0;
     }
     
     .btn-inject.stop {
       background: linear-gradient(90deg, #d32f2f, #f44336);
-      box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
     }
 
-    /* Área do Scanner / Logs */
+    /* ÁREA DO SCANNER (CORRIGIDA) */
     #scanner-container {
-      margin-top: 15px;
-      background: #000;
+      flex-grow: 1; /* Ocupa todo o espaço restante do card */
+      background: #050505;
       border-radius: 6px;
-      /* AUMENTADO DE 200px PARA 350px */
-      height: 350px;
-      overflow: hidden;
-      position: relative;
       border: 1px solid #333;
-      box-shadow: inset 0 0 30px #000;
+      position: relative;
+      overflow: hidden; /* Essencial para cortar o texto */
+      display: flex;
+      flex-direction: column;
     }
 
     #logs {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 11px;
-      color: #e040fb; /* Roxo Terminal */
-      padding: 10px;
-      white-space: pre-wrap;
       position: absolute;
-      width: 100%;
       top: 0;
-      line-height: 1.5;
-      /* Transição suave removida no CSS para ser controlada totalmente via JS para precisão */
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 10px;
+      line-height: 1.4;
+      color: #e040fb;
+      white-space: pre-wrap; /* Mantém quebra de linha do código */
+      word-break: break-all; /* Quebra palavras longas para não vazar lateralmente */
     }
 
-    /* Linha de Scanner */
     .scan-line {
       position: absolute;
-      width: 100%;
-      height: 2px;
+      width: 100%; height: 2px;
       background: #ff00ff;
-      box-shadow: 0 0 15px #ff00ff, 0 0 30px #d500f9;
+      box-shadow: 0 0 10px #ff00ff;
       z-index: 10;
+      top: 50%;
       display: none;
-      animation: scanMove 2s infinite linear;
-    }
-
-    @keyframes scanMove {
-      0% { top: 0%; }
-      50% { top: 100%; }
-      100% { top: 0%; }
     }
 
     .footer {
       text-align: center;
-      font-size: 10px;
-      color: #888;
+      font-size: 9px;
+      color: #666;
       margin-top: 10px;
-      font-weight: bold;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -250,69 +184,22 @@
     
     <div class="function-grid">
       <div class="func-item" onclick="selectFunction(this, 'aimlock.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-8c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4z"/></svg>
-        <span class="func-name">Aimlock Pro</span>
+        <div class="checkbox-custom"></div><span class="func-name">Aimlock Pro</span>
       </div>
-
       <div class="func-item" onclick="selectFunction(this, 'magicsensi.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-8.63 9.67l-1.63 5.48c-.14.45.41.83.78.53l4.58-3.69c.38-.3.33-.91-.1-1.12l-5.18-2.67c-.45-.24-.95.27-.67.7l2.22 3.86z"/></svg>
-        <span class="func-name">Magic Sensi</span>
+        <div class="checkbox-custom"></div><span class="func-name">Magic Sensi</span>
       </div>
-
       <div class="func-item" onclick="selectFunction(this, 'aimbot.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2z"/></svg>
-        <span class="func-name">Aimbot Legit</span>
+        <div class="checkbox-custom"></div><span class="func-name">Aimbot Legit</span>
       </div>
-
       <div class="func-item" onclick="selectFunction(this, 'headtrick.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
-        <span class="func-name">Headtrick</span>
+        <div class="checkbox-custom"></div><span class="func-name">Headtrick</span>
       </div>
-
       <div class="func-item" onclick="selectFunction(this, 'trickshoter.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M20.94 11c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
-        <span class="func-name">Trick Shoter</span>
+        <div class="checkbox-custom"></div><span class="func-name">Trick Shoter</span>
       </div>
-
       <div class="func-item" onclick="selectFunction(this, 'metadata.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/></svg>
-        <span class="func-name">Metadata Info</span>
-      </div>
-
-      <div class="func-item" onclick="selectFunction(this, 'norecoil.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm18 0c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8 8-3.58 8-8z"/><circle cx="12" cy="12" r="2"/></svg>
-        <span class="func-name">No Recoil</span>
-      </div>
-
-      <div class="func-item" onclick="selectFunction(this, 'aimlockV2.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-        <span class="func-name">Aimlock V2</span>
-      </div>
-
-      <div class="func-item" onclick="selectFunction(this, 'umptrick.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-        <span class="func-name">UMP Trick</span>
-      </div>
-
-      <div class="func-item" onclick="selectFunction(this, 'm1014trick.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.09.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        <span class="func-name">M1014 Trick</span>
-      </div>
-
-      <div class="func-item" onclick="selectFunction(this, 'clttrick.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
-        <span class="func-name">CLT Trick</span>
+        <div class="checkbox-custom"></div><span class="func-name">Metadata Info</span>
       </div>
     </div>
 
@@ -333,11 +220,10 @@
     let arquivoSelecionado = "";
     let nomeFuncaoSelecionada = "";
     let injecaoAtiva = false;
-    let scrollInterval = null;
+    let animacaoId = null;
     
-    // Sistema de seleção
     function selectFunction(element, arquivo) {
-      if(injecaoAtiva) return; // Trava seleção se estiver rodando
+      if(injecaoAtiva) return;
       
       document.querySelectorAll('.func-item').forEach(el => el.classList.remove('active'));
       element.classList.add('active');
@@ -345,30 +231,25 @@
       arquivoSelecionado = arquivo;
       nomeFuncaoSelecionada = element.querySelector('.func-name').innerText;
       
-      document.getElementById('logs').innerHTML = `> ALVO: ${nomeFuncaoSelecionada}<br>> ARQUIVO: ${arquivo}<br>> STATUS: PRONTO`;
-      // Reseta a posição do log visualmente
-      document.getElementById('logs').style.top = "0px";
+      document.getElementById('logs').innerHTML = `> ALVO: ${nomeFuncaoSelecionada}<br>> ARQUIVO: ${arquivo}<br>> STATUS: AGUARDANDO...`;
+      document.getElementById('logs').style.transform = "translateY(0px)";
     }
 
-    // Função principal
     async function alternarInjecao() {
       const btn = document.getElementById('btnInject');
       const logElement = document.getElementById('logs');
       const line = document.getElementById('line');
 
-      // Se já estiver rodando, para tudo
       if (injecaoAtiva) {
         pararInjecao(btn, logElement, line);
         return;
       }
 
-      // Validação
       if (!arquivoSelecionado) {
-        alert("⚠️ ERRO: Selecione uma função primeiro!");
+        alert("⚠️ Selecione uma função!");
         return;
       }
 
-      // Iniciar
       injecaoAtiva = true;
       btn.innerText = "PARAR INJEÇÃO";
       btn.classList.add('stop');
@@ -377,220 +258,79 @@
       try {
         logElement.innerHTML = `> LENDO ${arquivoSelecionado}...`;
         
-        // Fetch real sem fallback
-        const response = await fetch(arquivoSelecionado);
-        if (!response.ok) throw new Error("Erro de Leitura");
-        const rawText = await response.text();
-
-        // Repete apenas 3 vezes para garantir que tenha scroll, mas não fique impossível de chegar ao fim
-        let finalText = "";
-        for(let i=0; i<3; i++) {
-           finalText += `\n/* LEITURA BLOCO ${i+1} */\n` + rawText + "\n";
-        }
+        // Simulação de fetch (troque pelo fetch real se tiver os arquivos)
+        // const response = await fetch(arquivoSelecionado);
+        // const rawText = await response.text();
         
-        logElement.innerText = finalText;
+        // --- MODO DE TESTE (Para ver funcionar sem arquivos reais) ---
+        // Se for usar arquivos reais, delete a linha abaixo e use o fetch acima.
+        const rawText = await simularTextoLongo(); 
         
-        // Inicia o Loop Ping-Pong (Sobe e Desce)
-        iniciarLoopPingPong(logElement);
+        // LÓGICA DO LOOP INFINITO (DUPLICAÇÃO)
+        // Duplicamos o texto exato para criar o efeito de "esteira"
+        // Quando o scroll chegar no fim do primeiro bloco, ele pula pro inicio do segundo (que é igual ao primeiro)
+        const content = `\n/* INICIANDO LEITURA DE: ${arquivoSelecionado} */\n` + rawText + `\n/* FIM DO ARQUIVO */\n`;
+        
+        logElement.innerText = content + content; // Duplica o conteúdo
+        
+        iniciarScrollInfinito(logElement);
 
       } catch (err) {
-        logElement.innerText = `> ERRO CRÍTICO:\n> Não foi possível ler ${arquivoSelecionado}.\n> Verifique se o arquivo existe.`;
+        logElement.innerText = `> ERRO: ${err.message}`;
         pararInjecao(btn, logElement, line);
       }
     }
 
-    function iniciarLoopPingPong(element) {
-      let currentTop = 0;
-      let direction = -1; // -1 significa que o texto está subindo (lendo para baixo), 1 significa voltando ao topo
-      const speed = 2; // Velocidade do scroll
+    function iniciarScrollInfinito(element) {
+      let position = 0;
+      const speed = 2.5; // Ajuste a velocidade aqui
 
-      // Limpa anterior se existir
-      if(scrollInterval) clearInterval(scrollInterval);
-
-      scrollInterval = setInterval(() => {
+      function step() {
         if (!injecaoAtiva) return;
 
-        const containerHeight = element.parentElement.clientHeight;
-        const contentHeight = element.scrollHeight;
+        position += speed;
         
-        // Se o texto for menor que a caixa, não faz scroll
-        if (contentHeight <= containerHeight) return;
+        // A mágica: A altura total é 2x o texto.
+        // A altura de "reset" é metade da altura total (ou seja, o tamanho de 1 texto)
+        const totalHeight = element.scrollHeight;
+        const halfHeight = totalHeight / 2;
 
-        // Limite máximo que o Top pode chegar negativo (final do texto)
-        const maxScroll = -(contentHeight - containerHeight);
-
-        // Atualiza a posição baseada na direção
-        // Se direction é -1, estamos subtraindo (texto sobe, lemos para baixo)
-        // Se direction é 1, estamos somando (texto desce, voltamos ao topo)
-        currentTop += (speed * direction);
-
-        // Lógica de colisão
-        if (direction === -1) {
-            // Estamos descendo o olhar (texto subindo, top ficando mais negativo)
-            if (currentTop <= maxScroll) {
-                currentTop = maxScroll; // Trava no fundo
-                direction = 1; // Inverte para subir
-            }
-        } else {
-            // Estamos voltando ao topo (texto descendo, top indo para 0)
-            if (currentTop >= 0) {
-                currentTop = 0; // Trava no topo
-                direction = -1; // Inverte para descer de novo
-            }
+        // Se passamos da metade, volta pro zero (loop imperceptível)
+        if (position >= halfHeight) {
+          position = 0;
         }
+
+        // Aplica o movimento para cima (texto subindo = lendo para baixo)
+        element.style.transform = `translateY(-${position}px)`;
         
-        // Aplica o movimento
-        element.style.top = `${currentTop}px`;
-        
-      }, 20); // ~50fps
+        animacaoId = requestAnimationFrame(step);
+      }
+      
+      animacaoId = requestAnimationFrame(step);
     }
 
     function pararInjecao(btn, logElement, line) {
       injecaoAtiva = false;
-      if(scrollInterval) clearInterval(scrollInterval);
+      if(animacaoId) cancelAnimationFrame(animacaoId);
       
       btn.innerText = "INJETAR SCRIPT";
       btn.classList.remove('stop');
       line.style.display = "none";
       
-      // Opcional: Voltar ao topo quando para
-      // logElement.style.top = "0px"; 
-      
-      logElement.innerHTML += `\n\n> PROCESSO INTERROMPIDO PELO USUÁRIO.`;
-      // Rola para o final para mostrar a mensagem de parada
-      logElement.style.top = `-${logElement.scrollHeight - logElement.parentElement.clientHeight}px`;
+      logElement.style.transform = "translateY(0px)";
+      logElement.innerHTML = "> INJEÇÃO INTERROMPIDA.";
+    }
+
+    // Função apenas para gerar texto gigante de teste caso você não tenha os .js na pasta ainda
+    function simularTextoLongo() {
+        return new Promise(resolve => {
+            let txt = "";
+            for(let i=0; i<200; i++) {
+                txt += `function code_line_${i}() { return "memory_address_0x${Math.random().toString(16).substr(2,8)}"; }\n`;
+            }
+            resolve(txt);
+        });
     }
   </script>
 </body>
-</html>
-98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        <span class="func-name">M1014 Trick</span>
-      </div>
-
-      <div class="func-item" onclick="selectFunction(this, 'clttrick.js')">
-        <div class="checkbox-custom"></div>
-        <svg class="icon" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
-        <span class="func-name">CLT Trick</span>
-      </div>
-    </div>
-
-    <button class="btn-inject" id="btnInject" onclick="alternarInjecao()">INJETAR SCRIPT</button>
-
-    <div id="scanner-container">
-      <div class="scan-line" id="line"></div>
-      <div id="logs">
-        > MTZ SYSTEM READY...<br>
-        > AGUARDANDO COMANDO...
-      </div>
-    </div>
-
-    <div class="footer">MTZ INJECTOR • PRIVATE VERSION</div>
-  </main>
-
-  <script>
-    let arquivoSelecionado = "";
-    let nomeFuncaoSelecionada = "";
-    let injecaoAtiva = false;
-    let scrollInterval = null;
-    
-    // Sistema de seleção
-    function selectFunction(element, arquivo) {
-      if(injecaoAtiva) return; // Trava seleção se estiver rodando
-      
-      document.querySelectorAll('.func-item').forEach(el => el.classList.remove('active'));
-      element.classList.add('active');
-      
-      arquivoSelecionado = arquivo;
-      nomeFuncaoSelecionada = element.querySelector('.func-name').innerText;
-      
-      document.getElementById('logs').innerHTML = `> ALVO: ${nomeFuncaoSelecionada}<br>> ARQUIVO: ${arquivo}<br>> STATUS: PRONTO`;
-    }
-
-    // Função principal
-    async function alternarInjecao() {
-      const btn = document.getElementById('btnInject');
-      const logElement = document.getElementById('logs');
-      const line = document.getElementById('line');
-
-      // Se já estiver rodando, para tudo
-      if (injecaoAtiva) {
-        pararInjecao(btn, logElement, line);
-        return;
-      }
-
-      // Validação
-      if (!arquivoSelecionado) {
-        alert("⚠️ ERRO: Selecione uma função primeiro!");
-        return;
-      }
-
-      // Iniciar
-      injecaoAtiva = true;
-      btn.innerText = "PARAR INJEÇÃO";
-      btn.classList.add('stop');
-      line.style.display = "block";
-      
-      try {
-        logElement.innerHTML = `> LENDO ${arquivoSelecionado}...`;
-        
-        // Fetch real sem fallback
-        const response = await fetch(arquivoSelecionado);
-        if (!response.ok) throw new Error("Erro de Leitura");
-        const rawText = await response.text();
-
-        // Duplica o conteúdo para criar o efeito de loop infinito suave
-        // Repete o código várias vezes para preencher o scroll
-        let finalText = "";
-        for(let i=0; i<10; i++) {
-           finalText += `\n/* LEITURA BLOCO ${i+1} */\n` + rawText + "\n";
-        }
-        
-        logElement.innerText = finalText;
-        
-        // Inicia o Loop Infinito de Scroll
-        iniciarLoopInfinito(logElement);
-
-      } catch (err) {
-        logElement.innerText = `> ERRO CRÍTICO:\n> Não foi possível ler ${arquivoSelecionado}.\n> Verifique os arquivos na pasta.`;
-        pararInjecao(btn, logElement, line);
-      }
-    }
-
-    function iniciarLoopInfinito(element) {
-      let scrollTop = 0;
-      const speed = 2; // Velocidade do scroll
-
-      // Limpa anterior se existir
-      if(scrollInterval) clearInterval(scrollInterval);
-
-      scrollInterval = setInterval(() => {
-        if (!injecaoAtiva) return;
-
-        scrollTop += speed;
-        
-        // Se chegar na metade (assumindo conteúdo duplicado), volta pro topo instantaneamente
-        // para dar ilusão de infinito
-        if (scrollTop >= (element.scrollHeight - element.clientHeight)) {
-          scrollTop = 0; 
-        }
-        
-        // Aplica o movimento: De baixo para cima (texto sobe)
-        element.style.top = `-${scrollTop}px`;
-        
-      }, 20); // 60fps aprox
-    }
-
-    function pararInjecao(btn, logElement, line) {
-      injecaoAtiva = false;
-      if(scrollInterval) clearInterval(scrollInterval);
-      
-      btn.innerText = "INJETAR SCRIPT";
-      btn.classList.remove('stop');
-      line.style.display = "none";
-      logElement.style.top = "0px";
-      logElement.innerHTML += `\n\n> PROCESSO INTERROMPIDO PELO USUÁRIO.`;
-    }
-  </script>
-</body>
-
 </html>
