@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MTZ INJECTOR | ULTIMATE</title>
   <script>
+    // GUARDIÃO DE SEGURANÇA
+    // Verifica se o token de sessão existe.
+    // Se a pessoa copiou o link e colou, ou fechou a aba e abriu de novo, isso será null.
+    if (sessionStorage.getItem("user_access_token") !== "ALLOWED_SESSION_123") {
+        // Remove qualquer rastro e manda pro login
+        sessionStorage.clear();
+        window.location.replace("index.html");
+    }
     (function checkLoginStatus() {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         if (isLoggedIn !== 'true') {
@@ -469,4 +477,5 @@
 
 </body>
 </html>
+
 
