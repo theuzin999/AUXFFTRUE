@@ -4,6 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MTZ INJECTOR | ULTIMATE</title>
+  <script>
+    (function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn !== 'true') {
+            // Redireciona para o caminho raiz (que carrega o index.html)
+            window.location.replace('/'); 
+        }
+    })();
+</script>
   <style>
     :root {
       --primary: #9b26b6;
@@ -460,3 +469,4 @@
 
 </body>
 </html>
+
