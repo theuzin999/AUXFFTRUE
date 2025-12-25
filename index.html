@@ -266,12 +266,6 @@
     // ====================================================================
 })();
 
-
-
-
-
-
-
 GPT SCRIPT:
 
  (function antiDevTools() {
@@ -309,22 +303,6 @@ GPT SCRIPT:
     }, 1000);
   })();
 
-
-
-
-
-DEV+LOGUIN
-
-<script>
-  // 1) checa session
-  (function requireSession() {
-    const token = sessionStorage.getItem('sessionId');
-    if (!token) {
-      window.location.replace('/');
-      return;
-    }
-  })();
-
   // 2) anti-devtools
   (function antiDevTools() {
     const redirectURL = "https://www.google.com";
@@ -357,7 +335,7 @@ DEV+LOGUIN
     }, 1000);
   })();
     </script>
-
 </body>
 
 </html>
+
