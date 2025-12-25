@@ -395,55 +395,50 @@ sessionStorage.setItem("user_access_token", "ALLOWED_SESSION_123");
             d.style.animationDelay = Math.random() * 2 + 's';
             bg.appendChild(d);
         }
-        (function antiDevTools() {
-    const redirectURL = "https://www.google.com"; // URL de redirecionamento [cite: 22, 26]
-    const threshold = 160; // Limiar de pixels para detectar a abertura lateral [cite: 15]
+         <script>
+    (function antiDevTools() {
+      const redirectURL = "https://www.google.com"; // URL para onde será enviado se detectar devtools
 
-    // 1. Bloqueio de Teclas de Atalho (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C) 
-    document.addEventListener("keydown", (e) => {
-      if (
-        e.key === "F12" || 
-        (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key)) ||
-        (e.ctrlKey && ["U", "u"].includes(e.key))
-      ) {
-        e.preventDefault();
-        window.location.replace(redirectURL); [cite: 22, 26]
-      }
-    });
+      // 1. Bloqueia Teclas de Atalho Comuns (F12, Ctrl+Shift+I, etc)
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "F12" || 
+          (e.ctrlKey && e.shiftKey && ["I", "i", "J", "j", "C", "c"].includes(e.key)) ||
+          (e.ctrlKey && ["U", "u"].includes(e.key))
+        ) {
+          e.preventDefault();
+          window.location.replace(redirectURL);
+        }
+      });
 
-    // 2. Bloqueio de Clique Direito (Menu de Contexto) 
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
+      // 2. Bloqueia Clique Direito (Menu de Contexto)
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // 3. Detecção por Redimensionamento (comum ao abrir DevTools lateralmente) 
-    const checkSize = () => {
-      if (window.innerWidth < threshold || window.innerHeight < threshold) {
-        window.location.replace(redirectURL); [cite: 16]
-      }
-    };
-    window.addEventListener('resize', checkSize);
-    checkSize();
+      // 3. Detector Avançado de Console (Armadilha de Objeto)
+      // Detecta se o console do navegador tentar inspecionar o objeto 'element'
+      let devtools = { open: false };
+      const element = new Image();
+      
+      Object.defineProperty(element, "id", {
+        get: function () {
+          // Se o navegador tentar ler o ID deste elemento (o que o console faz automaticamente), detectamos a intrusão
+          window.location.replace(redirectURL);
+        },
+      });
 
-    // 4. Armadilha de Console (Objeto Detector) 
-    let devtools = { open: false };
-    const element = new Image();
-    
-    Object.defineProperty(element, "id", {
-      get: function () {
-        // Se o console estiver aberto, ele tentará ler as propriedades desta imagem
-        devtools.open = true; [cite: 23, 27]
-        window.location.replace(redirectURL); [cite: 25, 27]
-      },
-    });
-
-    setInterval(function () {
-      devtools.open = false; [cite: 24, 27]
-      console.log(element); // Dispara o 'get' se o console estiver aberto [cite: 24, 27]
-      console.clear(); // Limpa logs para dificultar a depuração
-    }, 1000);
-  })();
+      setInterval(function () {
+        // Imprime o elemento no console. Se o console estiver fechado, nada acontece.
+        // Se estiver aberto, ele tentará ler as propriedades do elemento, disparando o 'get' acima.
+        console.log(element);
+        // Limpa o console para dificultar a leitura de logs
+        console.clear(); 
+      }, 1000);
+      
+    })();
     </script>
 </body>
 </html>
+
 
 
 
