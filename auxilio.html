@@ -4,23 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MTZ INJECTOR | ULTIMATE</title>
-  <script>
-    // GUARDIÃO DE SEGURANÇA
-    // Verifica se o token de sessão existe.
-    // Se a pessoa copiou o link e colou, ou fechou a aba e abriu de novo, isso será null.
-    if (sessionStorage.getItem("user_access_token") !== "ALLOWED_SESSION_123") {
-        // Remove qualquer rastro e manda pro login
-        sessionStorage.clear();
-        window.location.replace("index.html");
-    }
-    (function checkLoginStatus() {
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        if (isLoggedIn !== 'true') {
-            // Redireciona para o caminho raiz (que carrega o index.html)
-            window.location.replace('/'); 
-        }
-    })();
-</script>
   <style>
     :root {
       --primary: #9b26b6;
@@ -329,6 +312,14 @@
       log.style.top = "0px";
     }
 
+    //SEGURANÇA
+    const hasSession = sessionStorage.getItem("user_access_token") === "ALLOWED_SESSION_123";
+    const hasCookie = document.cookie.includes("isLoggedIn=true");
+
+    if (!hasSession && !hasCookie) {
+        window.location.replace("index.html");
+    }
+
     // Função principal
     async function alternarInjecao() {
       const btn = document.getElementById('btnInject');
@@ -477,5 +468,3 @@
 
 </body>
 </html>
-
-
