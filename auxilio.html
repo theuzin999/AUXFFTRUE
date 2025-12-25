@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <script>
+  (function() {
+    // 1. Verifica se o token da ABA existe (sessionStorage morre ao fechar a aba)
+    const hasSession = sessionStorage.getItem("user_access_token") === "ALLOWED_SESSION_123";
+    
+    // 2. Verifica se o usuário acabou de vir da página de login (opcional, mas aumenta segurança)
+    const cameFromLogin = document.referrer.includes("index.html");
+
+    // Se não tiver o token de sessão, chuta para o index
+    if (!hasSession) {
+      // Limpa cookies por segurança antes de sair
+      document.cookie = "isLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.replace("index.html");
+    }
+  })();
+</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MTZ INJECTOR | ULTIMATE</title>
@@ -468,3 +484,4 @@
 
 </body>
 </html>
+
